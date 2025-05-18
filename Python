@@ -1,0 +1,25 @@
+import requests
+from bs4 import BeautifulSoup
+
+def simple_scraper(url):
+    try:
+        # Send HTTP request
+        response = requests.get(url)
+        response.raise_for_status()  # Raise error for bad responses
+
+        # Parse content
+        soup = BeautifulSoup(response.text, 'html.parser')
+
+        # Find all article titles (example: <h2> tags)
+        titles = soup.find_all('h2')
+
+        print(f"Found {len(titles)} titles:")
+        for idx, title in enumerate(titles, 1):
+            print(f"{idx}. {title.get_text(strip=True)}")
+
+    except requests.RequestException as e:
+        print(f"Request failed: {e}")
+
+# Example usage
+url = "https://example.com"  # Replace with a real blog/news URL
+simple_scraper(url)
